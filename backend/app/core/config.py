@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
@@ -11,6 +12,7 @@ class Settings(BaseSettings):
     """Settings loaded from environment variables or ``backend/.env``."""
 
     cors_allowed_origins: str = "http://localhost:5173"
+    database_url: SecretStr | None = None
 
     model_config = SettingsConfigDict(
         env_file=BACKEND_ROOT / ".env",

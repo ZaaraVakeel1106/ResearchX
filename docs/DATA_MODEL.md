@@ -1,8 +1,8 @@
 # Research X — Data Model
 
-**Status:** Proposed design
+**Status:** Proposed design; initial database foundation implemented
 **Product:** Research X
-**Purpose:** Define the core entities, relationships, identifiers, constraints, and provenance requirements before database implementation.
+**Purpose:** Define the core entities, relationships, identifiers, constraints, and provenance requirements for database implementation.
 
 ## 1. Design Goals
 
@@ -24,6 +24,14 @@ The proposed primary database is PostgreSQL.
 Use relational tables and foreign keys for authoritative application data. Use indexed relational queries initially for citation traversal and graph construction. Do not introduce a dedicated graph database unless measured requirements justify it.
 
 Use SQLAlchemy models and Alembic migrations in the backend. Pydantic schemas define API input and output contracts separately from database models.
+
+### Initial database implementation choices
+
+The initial schema uses separate paper and author external-identifier tables, preserving original values and optional normalized values. Metadata snapshots are JSONB on PostgreSQL, one snapshot per paper and source retrieval. The initial workspace schema includes skeletal users and workspaces, flat collections, and notes that can refer to at most one optional paper. A paper-linked note must point to a paper saved in that same workspace. Evidence passages and persisted AI answers are deferred until retention decisions are made. Non-citation relationship scores remain nullable and have no range check until their scale is defined.
+
+These choices define the scope of the initial migration only. Authentication and verification behavior, deletion and retention policy, deduplication, and evidence/AI persistence remain open. The `DECISIONS.md` statuses are not changed by this implementation.
+
+DOI values are stored in the paper external-identifier table; the schema does not duplicate them in a dedicated `papers.doi` column.
 
 ## 3. Identifier Rules
 
@@ -429,15 +437,12 @@ Fuzzy matching may suggest that two records describe the same work, but it must 
 Before implementation, decide and document:
 
 1. Authentication provider and account-verification model.
-2. Whether external identifiers use separate paper and author tables.
-3. The exact metadata provenance and snapshot strategy.
-4. Whether collections are nested or flat.
-5. Whether notes can reference multiple papers or specific passages.
-6. What full-text content can be retained under provider and publisher terms.
-7. The retention policy for AI answers and extracted evidence.
-8. The final deduplication and merge-review strategy.
-9. Which fields need full-text search, structured filtering, or vector retrieval.
-10. Whether evidence passages are persisted or retrieved on demand in the initial release.
+2. Whether identifiers can belong to more entity types and the exact cross-provider identity policy.
+3. What full-text content can be retained under provider and publisher terms.
+4. The retention policy for AI answers and extracted evidence.
+5. The final deduplication and merge-review strategy.
+6. Which fields need full-text search, structured filtering, or vector retrieval.
+7. Whether evidence passages are persisted or retrieved on demand in the initial release.
 
 These decisions must be resolved before they become implicit assumptions in migrations or API behavior.
 

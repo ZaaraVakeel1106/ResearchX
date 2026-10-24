@@ -54,7 +54,7 @@ Examples:
 - AI answer generation using mocked retrieval and model responses.
 - Workspace operations enforcing ownership and access rules.
 
-Use an isolated test database. Prefer PostgreSQL for tests involving PostgreSQL-specific behavior or constraints. Never run integration tests against production data.
+Use an isolated test database. Prefer PostgreSQL for tests involving PostgreSQL-specific behavior or constraints. The current model and migration tests use isolated SQLite databases with foreign-key enforcement, and the migration is separately rendered using PostgreSQL SQL. They require no PostgreSQL server or production credentials. Add an isolated PostgreSQL test job before relying on PostgreSQL-only behavior. Never run integration tests against production data.
 
 ### 3.3 API Tests
 
@@ -336,4 +336,4 @@ Live research databases change over time. Tests should validate the correctness 
 - The extent of automated accessibility testing.
 - The optional live-provider smoke-test procedure.
 
-These decisions must be recorded consistently with the architecture and development workflow documents.
+The supported PostgreSQL integration-test setup remains open. Current SQLite tests cover portable constraints, while PostgreSQL-only behavior still needs validation against an isolated PostgreSQL server.

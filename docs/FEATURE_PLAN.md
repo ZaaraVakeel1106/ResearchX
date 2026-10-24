@@ -63,7 +63,7 @@ Tasks:
 - [x] Add a health-check endpoint.
 - [x] Add centralized environment configuration for local CORS origins.
 - [ ] Add centralized error handling.
-- [ ] Add database connection configuration and migrations.
+- [x] Add database connection configuration and initial migrations.
 - [x] Establish typed health response and frontend service conventions.
 - [x] Create the initial landing page and navigation shell.
 - [ ] Add loading, empty, and error-state components.
@@ -328,8 +328,7 @@ Not yet verified:
 - Architecture beyond the initial application skeleton.
 - Technology choices beyond the React/Vite frontend and FastAPI backend foundation.
 - External provider selection.
-- Database schema.
-- Database setup and migrations.
+- PostgreSQL integration testing against an isolated live server.
 - Continuous integration and broader automated checks.
 - End-to-end feature behavior.
 
