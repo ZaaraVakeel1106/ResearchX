@@ -62,6 +62,40 @@ h1 em, h2 em { font-family: Georgia, serif; font-weight: 500; letter-spacing: -.
 .hero-index { position: absolute; left: 0; bottom: 22px; color: #a0a197; font-size: 8px; }
 .hero-index span { color: var(--orange); padding: 0 7px; }
 
+.discovery { border-top: 1px solid var(--line); padding: 62px 0 70px; }
+.discovery__intro { max-width: 660px; margin-bottom: 29px; }
+.discovery__intro h2 { margin-bottom: 15px; }
+.discovery__intro p { color: #72766f; font-size: 13px; line-height: 1.7; max-width: 580px; }
+.search-form { background: #ecebe3; border: 1px solid #e4e2d9; padding: 23px; }
+.search-form label { display: block; color: var(--ink); font-size: 12px; font-weight: 600; margin-bottom: 9px; }
+.search-form__controls { display: flex; gap: 10px; }
+.search-form input { min-width: 0; flex: 1; height: 46px; border: 1px solid #c9cdc3; border-radius: 0; padding: 0 13px; color: var(--ink); background: #fbfaf6; font: inherit; font-size: 14px; }
+.search-form button, .pagination button { min-height: 44px; border: 0; padding: 0 20px; background: var(--green); color: #f5f3ee; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+.search-form button:disabled, .pagination button:disabled { opacity: .52; cursor: not-allowed; }
+.search-form input:focus-visible, .search-form button:focus-visible, .pagination button:focus-visible, .paper-card__topline a:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.search-form > p { margin: 9px 0 0; color: var(--muted); font-size: 11px; }
+.search-feedback { min-height: 49px; padding-top: 18px; color: #73796f; font-size: 12px; }
+.search-feedback p { margin: 0; }
+.search-error { color: #9c4831; }
+.search-results__heading { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin: 14px 0 10px; color: var(--ink); }
+.search-results__heading p { margin: 0; font-size: 13px; font-weight: 600; }
+.search-results__heading span { color: var(--muted); font: 9px Consolas, monospace; text-transform: uppercase; letter-spacing: .06em; }
+.search-results ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.paper-card { border: 1px solid var(--line); background: #fbfaf6; padding: 21px 23px; }
+.paper-card__topline { display: flex; justify-content: space-between; gap: 12px; align-items: center; color: #899087; font: 9px Consolas, monospace; letter-spacing: .08em; }
+.paper-card__topline a { color: var(--green); font-size: 10px; font-weight: 600; letter-spacing: 0; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.paper-card h3 { margin: 14px 0 6px; font-size: 18px; line-height: 1.35; }
+.paper-card__authors { color: #5f6a61; font-size: 12px; line-height: 1.6; }
+.paper-card__details { display: flex; flex-wrap: wrap; gap: 8px 25px; padding: 12px 0; margin: 0 0 12px; border-top: 1px solid #e6e5dd; border-bottom: 1px solid #e6e5dd; }
+.paper-card__details div { display: flex; gap: 5px; font-size: 10px; line-height: 1.5; }
+.paper-card__details dt { color: var(--muted); }
+.paper-card__details dd { margin: 0; color: var(--ink); }
+.paper-card__abstract { color: #72766f; font-size: 12px; line-height: 1.75; margin-bottom: 12px; white-space: pre-line; }
+.paper-card__source { color: #92958b; font: 9px Consolas, monospace; margin: 0; }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 16px; padding-top: 22px; color: var(--muted); font-size: 11px; }
+.pagination button { min-height: 37px; padding: 0 14px; }
+.pagination__limit { color: var(--muted); font-size: 11px; line-height: 1.6; text-align: center; }
+
 .approach { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 51px 0 55px; display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 7%; align-items: start; }
 .section-number { display: block; color: #9a9c92; font-size: 9px; margin-bottom: 17px; }
 h2 { font-size: clamp(24px, 2.7vw, 36px); line-height: 1.15; font-weight: 500; letter-spacing: -.055em; margin-bottom: 0; }
@@ -86,6 +120,13 @@ h3 { font-size: 14px; font-weight: 600; letter-spacing: -.02em; margin: 15px 0 8
   .api-status { font-size: 9px; }
   .hero { padding-top: 48px; }
   h1 { font-size: 48px; }
+  .discovery { padding: 43px 0 50px; }
+  .search-form { padding: 15px; }
+  .search-form__controls { flex-direction: column; }
+  .search-form button { min-height: 43px; }
+  .paper-card { padding: 16px; }
+  .paper-card__topline { align-items: flex-start; }
+  .paper-card__details { gap: 8px 15px; }
   .map-card { min-height: 325px; padding: 16px 13px 13px; }
   .idea-map { margin-top: 8px; }
   .approach { grid-template-columns: 1fr; gap: 28px; padding: 39px 0; }

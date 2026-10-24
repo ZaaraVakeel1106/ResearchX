@@ -6,7 +6,7 @@ Research X is a research-paper discovery and exploration platform designed to he
 
 Rather than stopping at a list of search results, Research X aims to connect the stages of research: discovery, reading, evidence verification, exploration, and organization.
 
-> **Project status:** The initial FastAPI and React application foundation is implemented. Academic search and other product features remain planned.
+> **Project status:** The FastAPI and React foundation and a stateless OpenAlex paper search experience are implemented. Provider selection and other product features remain under evaluation or planned.
 
 ## The Problem
 
@@ -28,9 +28,9 @@ Research X aims to bring these activities into a connected research workflow.
 
 Build a research workspace that helps users move from a question to a deeper understanding of the literature, with traceable sources and clear distinctions between verified facts and AI-generated suggestions.
 
-### Planned Capabilities
+### Capabilities
 
-- **Paper discovery:** Search and explore academic papers using normalized research metadata.
+- **Paper discovery:** An initial OpenAlex search experience returns normalized provider metadata without saving results. Provider selection, filters, and persistent canonical paper records remain open or planned.
 - **Paper exploration:** Inspect paper details, authors, publication information, references, and citing papers.
 - **Citation graph:** Navigate bibliographic relationships visually.
 - **Evidence-grounded reading:** Ask questions about supported paper content and inspect the evidence behind answers.
@@ -38,7 +38,7 @@ Build a research workspace that helps users move from a question to a deeper und
 - **Paper comparison:** Compare research questions, methods, findings, and limitations.
 - **Research exploration assistance:** Generate research directions and possible gaps as hypotheses to investigate, not guaranteed discoveries.
 
-These capabilities are planned; they are not yet implemented.
+The remaining capabilities are planned; paper detail, graph, reader, workspace, and comparison workflows are not implemented yet.
 
 ## What Makes Research X Different?
 
@@ -148,6 +148,7 @@ The project has an initial application foundation; product features are still in
 - [ ] Validate external providers and important technical choices.
 - [x] Establish local frontend and backend setup instructions.
 - [x] Implement the initial application skeleton and health endpoint.
+- [x] Implement stateless OpenAlex paper search and discovery UI.
 - [ ] Build and test the MVP incrementally.
 
 Checklist items describe planning progress and must be updated when implementation work is actually completed.
@@ -163,10 +164,13 @@ cd backend
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+Copy-Item .env.example .env
+# Set RESEARCH_X_DATABASE_URL for local PostgreSQL; optionally set RESEARCH_X_OPENALEX_API_KEY.
+python -m alembic upgrade head
 python -m uvicorn app.main:app --reload
 ```
 
-The API is available at `http://localhost:8000`; its health endpoint is `http://localhost:8000/api/v1/health`.
+Run a local PostgreSQL server separately before applying migrations. The example connection string contains a placeholder password; replace it only in the ignored `.env` file. The API is available at `http://localhost:8000`; its health endpoint is `http://localhost:8000/api/v1/health`.
 
 ### Frontend
 
@@ -178,11 +182,11 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite (normally `http://localhost:5173`). The landing page checks the backend health endpoint through Vite's development proxy.
+Open the local URL printed by Vite (normally `http://localhost:5173`). The landing page checks backend health and includes paper search through Vite's development proxy.
 
 ### Configuration
 
-Local defaults need no secrets. Optional settings can be supplied with environment files based on `backend/.env.example` and `frontend/.env.example`. The backend reads `RESEARCH_X_CORS_ALLOWED_ORIGINS`; Vite reads `VITE_API_PROXY_TARGET` and `VITE_API_BASE_URL`. Keep real `.env` files out of Git.
+The backend reads `RESEARCH_X_CORS_ALLOWED_ORIGINS`, `RESEARCH_X_DATABASE_URL`, `RESEARCH_X_OPENALEX_BASE_URL`, and the optional secret `RESEARCH_X_OPENALEX_API_KEY`; database access and migrations require a PostgreSQL URL, while low-volume OpenAlex search can run without a key. Vite reads `VITE_API_PROXY_TARGET` and `VITE_API_BASE_URL`. Example environment files contain placeholders only; keep real `.env` files out of Git. Review [OpenAlex authentication and rate limits](https://help.openalex.org/api/authentication/) and [search pricing](https://help.openalex.org/api/searching/) before operating at higher volume.
 
 ### Tests
 
@@ -192,9 +196,11 @@ From the repository root, after installing the backend dependencies:
 .\backend\.venv\Scripts\python.exe -m pytest backend/tests -v
 ```
 
+Database tests use isolated SQLite databases and do not read `.env` or require PostgreSQL credentials. The migration is also rendered using the PostgreSQL dialect in the test suite.
+
 ## Development Approach
 
-Research X will be built incrementally. The current foundation includes a versioned FastAPI health endpoint and a React + TypeScript + Vite landing page. Feature-specific behavior remains planned until implemented and verified.
+Research X will be built incrementally. The current foundation includes a versioned FastAPI health endpoint, a React + TypeScript + Vite landing page, and a stateless OpenAlex paper search experience. Search results are not persisted; provider selection remains subject to evaluation.
 
 Each feature should have clear acceptance criteria, focused implementation changes, appropriate automated tests, and updated documentation. Generated code must be reviewed rather than accepted solely because it compiles.
 

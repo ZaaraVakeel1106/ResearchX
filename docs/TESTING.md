@@ -148,6 +148,8 @@ Verify that:
 - Empty results are distinct from provider failures.
 - Search results preserve the provenance needed for later inspection.
 
+The OpenAlex adapter tests use HTTPX mock transports and synthetic responses. They must not require network access, an OpenAlex API key, or PostgreSQL. Cover missing metadata, malformed payloads, timeouts, connection errors, HTTP failures, and upstream rate limiting.
+
 ## 5. AI and Evidence Tests
 
 AI features require additional safeguards because fluent answers can still be incorrect.

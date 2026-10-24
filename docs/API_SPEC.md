@@ -101,6 +101,7 @@ Initial error codes:
 - `FORBIDDEN`: the authenticated user lacks permission.
 - `RATE_LIMITED`: request limit exceeded.
 - `PROVIDER_UNAVAILABLE`: an external metadata provider cannot currently be used.
+- `PROVIDER_RATE_LIMITED`: an external metadata provider is rate limiting requests.
 - `AI_UNAVAILABLE`: the configured AI service is unavailable.
 - `INTERNAL_ERROR`: unexpected server error.
 
@@ -208,20 +209,15 @@ If a separate readiness check is required to verify database or provider connect
 
 Purpose: search for academic papers using a configured metadata provider.
 
-Proposed query parameters:
+Implemented query parameters:
 
 | Parameter | Type | Meaning |
 |---|---|---|
-| `q` | string | Search query |
-| `year_from` | integer | Earliest publication year |
-| `year_to` | integer | Latest publication year |
-| `author` | string | Author-name filter where supported |
-| `open_access` | boolean | Filter to records with reliably established open-access status, where supported |
-| `sort` | string | Supported sort option |
-| `page` | integer | Page number for offset-based pagination |
-| `page_size` | integer | Number of results requested, subject to a server-side maximum |
+| `q` | string | Required, trimmed search query from 1 to 300 characters |
+| `page` | integer | Offset-based page number, starting at 1; pages overlapping the first 10,000 provider results are supported; defaults to 1 |
+| `page_size` | integer | Results per page, from 1 to 50; defaults to 20 |
 
-At least a non-empty query or another explicitly supported discovery criterion must be provided. Exact validation rules must be finalized during implementation.
+This milestone searches OpenAlex works. It does not persist results, so results carry a `provider_id` instead of an internal Research X paper ID. The OpenAlex adapter is the initial provider implementation; provider selection remains open in `DECISIONS.md` pending the planned coverage and terms evaluation.
 
 Successful response: `200 OK`.
 
@@ -229,36 +225,45 @@ Successful response: `200 OK`.
 {
   "items": [
     {
-      "id": "internal-paper-id",
+      "provider_id": "https://openalex.org/W123",
+      "provider_url": "https://openalex.org/W123",
       "title": "Example Research Paper",
       "authors": [
         {
-          "id": "internal-author-id",
+          "provider_id": "https://openalex.org/A123",
           "display_name": "Example Author"
         }
       ],
       "publication_year": 2025,
+      "publication_date": "2025-04-12",
       "venue": null,
       "doi": null,
       "abstract": null,
       "landing_page_url": null,
-      "open_access_status": null,
+      "open_access_status": "open_access",
+      "open_access_url": null,
+      "citation_count": 12,
       "metadata_provenance": {
-        "provider": "configured-provider",
-        "retrieved_at": "2026-01-01T00:00:00Z"
+        "provider": "openalex",
+        "retrieved_at": "2026-10-25T00:00:00Z"
       }
     }
   ],
   "pagination": {
     "page": 1,
     "page_size": 20,
-    "total": null,
-    "has_more": false
+    "total": 1,
+    "has_more": false,
+    "provider_limit_reached": false
   }
 }
 ```
 
 All sample values are illustrative. Actual responses must use real retrieved metadata. The provider name and retrieval timestamp must not be fabricated.
+
+Optional fields remain `null` when OpenAlex does not provide them. `authors: null` means author metadata is unavailable; an empty array means the provider returned no authors. `landing_page_url` links to the paper when available; otherwise `provider_url` can link to the OpenAlex record. OpenAlex's basic offset paging covers at most 10,000 results. When that boundary is reached, `has_more` is false and `provider_limit_reached` is true if the provider reports additional matches. Cursor paging is not implemented in this milestone.
+
+Invalid query or pagination values return `422` with `VALIDATION_ERROR`. Provider rate limits return `503` with `PROVIDER_RATE_LIMITED`; other upstream failures return `502` with `PROVIDER_UNAVAILABLE`. Error messages do not include raw provider responses, exception details, or credentials.
 
 Requirements:
 

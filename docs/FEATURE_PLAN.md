@@ -83,13 +83,15 @@ Tasks:
 Tasks:
 
 - [ ] Select and document an academic metadata provider.
-- [ ] Implement a backend integration adapter.
-- [ ] Normalize provider responses into Research X schemas.
-- [ ] Implement search and pagination.
+- [x] Implement the initial OpenAlex backend integration adapter; final provider selection remains open.
+- [x] Normalize provider responses into Research X schemas.
+- [x] Implement search and bounded pagination.
 - [ ] Add relevant filters where supported.
-- [ ] Build the search-results interface.
+- [x] Build the search-results interface.
 - [ ] Implement paper identification and deduplication.
-- [ ] Handle missing metadata, rate limits, and provider failures.
+- [x] Handle missing metadata, rate limits, and provider failures.
+
+Milestone 3 also adds the paper-discovery interface with loading, empty, error, and result states. Search is read-only and does not persist results. OpenAlex's basic offset paging is limited to the first 10,000 matching works; cursor paging is deferred.
 
 **Acceptance criteria**
 

@@ -200,7 +200,7 @@ The adapter should:
 
 Provider-specific response fields must not leak throughout the frontend or unrelated backend modules.
 
-OpenAlex is the initial candidate, but its supported fields, reference availability, usage terms, and rate limits must be verified before integration.
+OpenAlex is implemented as the initial metadata search adapter for Milestone 3. This implementation uses its Works search endpoint and normalizes only the fields present in each response. The provider-selection decision remains open until coverage, usage terms, supported fields, reference availability, costs, and rate limits are evaluated. Provider keys are optional, backend-only environment settings.
 
 Do not assume every record has an abstract, DOI, reference list, full text, or complete author metadata.
 

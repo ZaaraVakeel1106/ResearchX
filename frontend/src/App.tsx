@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { PaperDiscovery } from "./components/PaperDiscovery";
 import { getHealth } from "./services/api";
 
 type ApiState = "checking" | "online" | "offline";
@@ -42,8 +43,8 @@ function App() {
           <p className="intro">
             Follow the ideas behind a question, see how studies relate, and keep the evidence in view as you explore.
           </p>
-          <a className="explore-link" href="#approach">
-            Explore the approach <span aria-hidden="true">↘</span>
+          <a className="explore-link" href="#search">
+            Discover papers <span aria-hidden="true">↘</span>
           </a>
         </div>
 
@@ -70,6 +71,8 @@ function App() {
         </div>
         <div className="hero-index" aria-hidden="true">RESEARCH, MADE TRACEABLE <span>✳</span> VOL. 01</div>
       </section>
+
+      <PaperDiscovery />
 
       <section className="approach" id="approach" aria-label="Research X principles">
         <div className="approach-intro">
